@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter Média</title>
+</head>
+<body>
+    <h1>Ajouter un Média</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label>Type :</label>
+        <select name="type" required>
+            <option value="Livre">Livre</option>
+            <option value="DVD">DVD</option>
+            <option value="CD">CD</option>
+            <option value="Jeu">Jeu de Plateau</option>
+        </select><br><br>
+        <label>Nom :</label>
+        <input type="text" name="nom" required maxlength="200"><br><br>
+        <label>Auteur/Réalisateur/Artiste/Créateur :</label>
+        <input type="text" name="auteur" maxlength="100"><br><br>  <!-- Utilisé par vue selon type -->
+        <button type="submit">Ajouter</button>
+    </form>
+    <a href="{% url 'liste_medias' %}">Retour Liste</a>
+    <a href="{% url 'menu_biblio' %}">Menu</a>
+</body>
+</html>

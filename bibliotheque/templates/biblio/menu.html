@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu Bibliothécaire</title>
+</head>
+<body>
+    <h1>Menu Bibliothécaire</h1>
+    <a href="{% url 'liste_membres' %}">Gérer Membres</a> |
+    <a href="{% url 'liste_medias' %}">Gérer Médias</a> |
+    <a href="{% url 'ajouter_media' %}">Ajouter Média</a> |
+    <a href="{% url 'liste_emprunts' %}">Gérer Emprunts</a>|
+    <a href="/admin/">Admin (Données Test)</a>
+</body>
+</html>

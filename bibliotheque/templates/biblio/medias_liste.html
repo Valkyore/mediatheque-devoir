@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Médias</title>
+</head>
+<body>
+    <h1>Liste des Médias</h1>
+    <ul>
+        {% for media in medias %}
+            <li>{{ media.nom }} ({{ media.type_media }} - Disponible : {{ media.disponible }})
+                {% if media.auteur %} - Auteur : {{ media.auteur }}{% endif %}
+                {% if media.realisateur %} - Réalisateur : {{ media.realisateur }}{% endif %}
+                {% if media.artiste %} - Artiste : {{ media.artiste }}{% endif %}
+                {% if media.createur %} - Créateur : {{ media.createur }}{% endif %}
+                {% if media.disponible and media.type_media != 'Jeu' %}
+                    <form method="post" action="{% url 'creer_emprunt' media.pk media.type_media 0 %}" style="display:inline;">
+                        {% csrf_token %}
+                        <select name="emprunteur_pk" required>
+                            <option value="">Choisir Membre</option>
+                            {% for membre in membres %}
+                                {% if membre.peut_emprunter %}
+                                    <option value="{{ membre.pk }}">{{ membre.nom }} (Actifs : {{ membre.emprunts_actifs }})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Emprunter ce Média</button>
+                    </form>
+                {% else %}
+                    <span style="color:red;">Non disponible ou non empruntable</span>
+                {% endif %}
+            </li>
+        {% empty %}
+            <p>Aucun média. Ajoutez-en !</p>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'ajouter_media' %}">Ajouter Média</a>
+    <a href="{% url 'menu_biblio' %}">Menu</a>
+</body>
+</html>

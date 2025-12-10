@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Membres</title>
+</head>
+<body>
+    <h1>Liste des Membres</h1>
+    <ul>
+    {% for membre in membres %}
+        <li>{{ membre.nom }} (Bloqué : {{ membre.bloque }})
+            <a href="{% url 'update_membre' membre.pk %}">Modifier</a>
+        </li>
+    {% empty %}
+        <p>Aucun membre. Ajoutez-en via /biblio/membre/creer/ ou admin.</p>
+    {% endfor %}
+    </ul>
+    <a href="{% url 'creer_membre' %}">Ajouter Membre</a>
+    <a href="{% url 'menu_biblio' %}">Retour Menu</a>
+    </body>
+</html>

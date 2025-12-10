@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Médias</title>
+</head>
+<body>
+    <h1>Liste des Médias Disponibles</h1>
+    <ul>
+    {% for media in medias %}
+        <li>{{ media.nom }} ({{ media.type_media }} - Disponible : {{ media.disponible }})
+            {% if media.auteur %} - Auteur : {{ media.auteur }}{% endif %}
+            {% if media.realisateur %} - Réalisateur : {{ media.realisateur }}{% endif %}
+            {% if media.artiste %} - Artiste : {{ media.artiste }}{% endif %}
+            {% if media.createur %} - Créateur : {{ media.createur }}{% endif %}
+        </li>
+    {% empty %}
+        <p>Aucun média disponible. Ajoutez-en via l'admin.</p>
+    {% endfor %}
+    </ul>
+    <a href="{% url 'menu_membre' %}">Retour Menu</a>
+</body>
+</html>

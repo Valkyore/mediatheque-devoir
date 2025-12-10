@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Modier Membre</title>
+</head>
+<body>
+    <h1>Modifier {{ membre.nom }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="nom">Nom :</label>
+        <input type="text" name="nom" id="nom" value="{{ membre.nom }}" required maxlength="100"><br><br>
+        <button type="submit">Modifier</button>
+    </form>
+    <a href="{% url 'liste_membres' %}">Retour Liste</a>
+    <a href="{% url 'menu_biblio' %}">Menu</a>
+</body>
+</html>

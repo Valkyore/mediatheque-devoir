@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Créer Membre</title>
+</head>
+<body>
+    <h1>Créer un Nouvel Emprunteur</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="nom">Nom :</label>
+        <input type="text" name="nom" id="nom" required maxlength="100"><br><br>
+        <button type="submit">Créer</button>
+    </form>
+    <a href="{% url 'liste_membres' %}">Retour Liste Membres</a>
+    <a href="{% url 'menu_biblio' %}">Retour Menu</a>
+</body>
+</html>
