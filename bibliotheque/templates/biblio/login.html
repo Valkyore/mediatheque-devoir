@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Bibliothécaire</title>
+</head>
+<body>
+    <h1>Connexion Bibliothécaire</h1>
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li style="color: red;">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <label>Username :</label>
+        <input type="text" name="username" required><br><br>
+        <label>Password :</label>
+        <input type="password" name="password" required><br><br>
+        <button type="submit">Se Connecter</button>
+    </form>
+    <a href="/membre/menu/">Accès Public</a>
+</body>
+</html>

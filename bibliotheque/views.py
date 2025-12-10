@@ -1,33 +1,55 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required  # Restreint aux connectés (biblio)
+from django.contrib.auth.decorators import login_required
 from .models import Emprunteur, Livre, DVD, CD, JeuDePlateau, Emprunt
 from django.core.exceptions import ValidationError
 import requests
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('menu_biblio')
+        messages.error(request, 'Login invalide.')
+    return render(request, 'biblio/login.html')
 
-def is_authenticated(user):
-    return user.is_authenticated
+def logout_view(request):
+    logout(request)
+    return redirect('home')
 
 def home(request):
-    # Page accueil avec liens conditionnels
     return render(request, 'home.html', {'is_logged': request.user.is_authenticated})
 
-@login_required  # Seulement biblio (login via /admin/)
+@login_required
 def liste_membres(request):
-    membres = Emprunteur.objects.all()  # Affiche tous
+    membres = Emprunteur.objects.all()
     return render(request, 'biblio/membres_liste.html', {'membres': membres})
 
+@login_required
 def creer_membre(request):
     if request.method == 'POST':
         nom = request.POST.get('nom', '').strip()
-        if nom:  # Validation simple
+        if nom:
             Emprunteur.objects.create(nom=nom)
             return redirect('liste_membres')
         return HttpResponse("Erreur : Nom requis.")
     return render(request, 'biblio/creer_membre.html')
 
-def update_membre(request, pk):  # pk = id
+@login_required
+def delete_membre(request, pk):
+    membre = get_object_or_404(Emprunteur, pk=pk)
+    if request.method == 'POST':
+        membre.delete()
+        return redirect('liste_membres')
+    return render(request, 'biblio/confirm_delete.html', {'membre': membre})
+
+@login_required
+def update_membre(request, pk):
     membre = get_object_or_404(Emprunteur, pk=pk)
     if request.method == 'POST':
         nom = request.POST.get('nom', '').strip()
@@ -38,29 +60,28 @@ def update_membre(request, pk):  # pk = id
         return HttpResponse("Erreur : Nom requis.")
     return render(request, 'biblio/update_membre.html', {'membre': membre})
 
+
 def liste_medias(request):
-    # Union de tous les médias
     medias = list(Livre.objects.all()) + list(DVD.objects.all()) + list(CD.objects.all()) + list(JeuDePlateau.objects.all())
-    # Filtre membres qui peuvent emprunter
     all_membres = Emprunteur.objects.all()
     membres = [m for m in all_membres if m.peut_emprunter()]
     return render(request, 'biblio/medias_liste.html', {'medias': medias, 'membres': membres})
 
+@login_required
 def ajouter_media(request):
     if request.method == 'POST':
         type_m = request.POST.get('type')
         nom = request.POST.get('nom', '').strip()
         if not nom:
             return HttpResponse("Erreur : Nom requis.")
-        auteur = ''  # Default
+        auteur = ''
         if type_m == 'Livre':
-            # Appel Web Service : Recherche auteur via Open Library API
             try:
                 response = requests.get(f"https://openlibrary.org/search.json?q={nom}")
                 if response.status_code == 200:
                     data = response.json()
                     if data['docs']:
-                        auteur = data['docs'][0]['author_name'][0] if data['docs'][0]['author_name'] else request.POST.get('auteur', '')
+                        auteur = data['docs'][0]['author_name'][0] if data['docs'][0].get('author_name') else request.POST.get('auteur', '')
                     else:
                         auteur = request.POST.get('auteur', '')
                 else:
@@ -80,6 +101,7 @@ def ajouter_media(request):
         return redirect('liste_medias')
     return render(request, 'biblio/ajouter_media.html')
 
+@login_required
 def creer_emprunt(request, media_pk, media_type, emprunteur_pk):
     if request.method == 'POST':
         emprunteur_pk = request.POST.get('emprunteur_pk')
@@ -108,14 +130,15 @@ def creer_emprunt(request, media_pk, media_type, emprunteur_pk):
 
 @login_required
 def liste_emprunts(request):
-    emprunts = Emprunt.objects.filter(retourne=False)  # Emprunts actifs
+    emprunts = Emprunt.objects.filter(retourne=False)
     return render(request, 'biblio/emprunts_liste.html', {'emprunts': emprunts})
 
+@login_required
 def rentrer_emprunt(request, pk):
     emprunt = get_object_or_404(Emprunt, pk=pk)
     emprunt.retourner()
     return redirect('liste_medias')
 
+@login_required
 def menu_biblio(request):
-    # Menu principal biblio (liens vers vues)
     return render(request, 'biblio/menu.html')

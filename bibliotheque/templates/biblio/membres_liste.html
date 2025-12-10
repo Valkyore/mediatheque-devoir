@@ -10,6 +10,7 @@
     {% for membre in membres %}
         <li>{{ membre.nom }} (Bloqué : {{ membre.bloque }})
             <a href="{% url 'update_membre' membre.pk %}">Modifier</a>
+            <a href="{% url 'delete_membre' membre.pk %}" onclick="return confirm('Supprimer {{ membre.nom }} ?')">Supprimer</a>
         </li>
     {% empty %}
         <p>Aucun membre. Ajoutez-en via /biblio/membre/creer/ ou admin.</p>

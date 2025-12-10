@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmer Suppression</title>
+</head>
+<body>
+    <h1>Confirmer Suppression de {{ membre.nom }}</h1>
+    <p>Tous les emprunts associés seront supprimés.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'liste_membres' %}">Annuler</a>
+</body>
+</html>

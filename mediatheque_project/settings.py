@@ -124,4 +124,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = '/admin/'
+LOGIN_URL = '/biblio/login/'
+LOGIN_REDIRECT_URL = '/biblio/menu/'
+LOGOUT_REDIRECT_URL = '/'
+SESSION_COOKIE_AGE = 3600 # empêche d'être auto connecté après un python manage.py runserver

@@ -7,14 +7,9 @@
 <body>
     <h1>Bienvenue à la Médiathèque "Notre livre, notre média"</h1>
     <p>Choisissez votre accès :</p>
-    <ul>
-        <li><a href="/membre/menu/">Consultation Publique (Membres)</a> - Voir tous les médias</li>
-        {% if is_logged %}
-            <li><a href="/biblio/menu/">Espace Bibliothécaire</a> - Gérer membres et médias</li>
-            <li><a href="/admin/logout/">Déconnexion</a></li>
-        {% else %}
-            <li><a href="/admin/">Connexion Bibliothécaire</a></li>
-        {% endif %}
-    </ul>
+<a href="/membre/menu/">Public</a> | <a href="/biblio/login/">Biblio Login</a>
+{% if is_logged %}
+    <a href="/biblio/menu/">Espace Biblio</a> | <a href="{% url 'logout' %}">Déconnexion</a>
+{% endif %}
 </body>
 </html>
