@@ -1,4 +1,5 @@
 Description
+
 Application web Django pour gérer une médiathèque. Les bibliothécaires (logué) gèrent membres et médias, avec emprunts contraints (max 3 actifs, bloqué après 1 semaine retard, jeux non-empruntables). 
 Public consulte les médias. Intégration API Open Library pour auto-remplissage auteur livres. Tests unitaires inclus.
 
